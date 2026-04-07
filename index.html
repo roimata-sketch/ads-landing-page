@@ -266,45 +266,42 @@
     </div>
 </div>
 
-<section class="results-gallery">
+<section class="results-gallery" id="results-gallery">
     <div class="results-gallery-container">
         <h2>The numbers don't lie</h2>
-        <p class="results-gallery-subtitle">Click to see the full dashboards and metrics in detail.</p>
+        <p class="results-gallery-subtitle">Real dashboards. Real data. Swipe to explore.</p>
 
-        <div class="dashboard-gallery">
-            <div class="dashboard-item zoom-trigger">
-                <img src="./assets/client-results/petconz-roas-18x.png" alt="Meta Ads - 18x ROAS" />
-                <div class="zoom-overlay">
-                    <p>18x ROAS</p>
-                    <div class="zoom-overlay-privacy">Campaign names anonymized to protect client confidentiality</div>
+        <div class="dashboard-slider">
+            <button class="slider-btn slider-prev" aria-label="Previous">&lt;</button>
+            <div class="slider-track">
+                <div class="slider-slide">
+                    <div class="dashboard-item zoom-trigger">
+                        <img src="./assets/client-results/petconz-roas-18x.png" alt="Meta Ads - 18x ROAS" />
+                    </div>
+                    <p class="slide-caption">18x return on ad spend for an ecommerce brand using Meta ads. Every $1 spent brought back $18 in revenue.</p>
+                </div>
+                <div class="slider-slide">
+                    <div class="dashboard-item zoom-trigger">
+                        <img src="./assets/client-results/leadgen-meta-cpl-1.png" alt="Meta Ads - Lead Generation" />
+                    </div>
+                    <p class="slide-caption">79 leads at $10.78 per lead through Meta ads. Consistent, affordable lead generation for a service business.</p>
+                </div>
+                <div class="slider-slide">
+                    <div class="dashboard-item zoom-trigger">
+                        <img src="./assets/client-results/petconz-roas-7x.png" alt="Meta Ads - 7x ROAS" />
+                    </div>
+                    <p class="slide-caption">7x ROAS across 267 purchases. Scaling profitably with Meta ads while maintaining strong return on every dollar.</p>
+                </div>
+                <div class="slider-slide">
+                    <div class="dashboard-item zoom-trigger">
+                        <img src="./assets/client-results/bout-leads-cpr.png" alt="Lead Cost Performance" />
+                    </div>
+                    <p class="slide-caption">Gym client generating new member signups at scale through targeted Meta lead campaigns with low cost per result.</p>
                 </div>
             </div>
-
-            <div class="dashboard-item zoom-trigger">
-                <img src="./assets/client-results/leadgen-meta-cpl-1.png" alt="Meta Ads - Lead Generation" />
-                <div class="zoom-overlay">
-                    <p>Lead Generation</p>
-                    <div class="zoom-overlay-privacy">Campaign names anonymized to protect client confidentiality</div>
-                </div>
-            </div>
-
-            <div class="dashboard-item zoom-trigger">
-                <img src="./assets/client-results/petconz-roas-7x.png" alt="Meta Ads - 7x ROAS" />
-                <div class="zoom-overlay">
-                    <p>7x ROAS</p>
-                    <div class="zoom-overlay-privacy">Campaign names anonymized to protect client confidentiality</div>
-                </div>
-            </div>
-
-            <div class="dashboard-item zoom-trigger">
-                <img src="./assets/client-results/bout-leads-cpr.png" alt="Lead Cost Performance" />
-                <div class="zoom-overlay">
-                    <p>Lead Cost Performance</p>
-                    <div class="zoom-overlay-privacy">Campaign names anonymized to protect client confidentiality</div>
-                </div>
-            </div>
-
+            <button class="slider-btn slider-next" aria-label="Next">&gt;</button>
         </div>
+        <div class="slider-dots"></div>
 
         <p class="results-gallery-footer">Real results. Real businesses. Real growth. Client names and identifiable information blurred to protect privacy.</p>
     </div>
@@ -559,28 +556,32 @@
         });
     });
 
-    // NAV DROPDOWN
-    const navToggle = document.querySelector('.nav-toggle');
-    const navDropdown = document.querySelector('.nav-dropdown');
+    // RESULTS SLIDER
+    const slides = document.querySelectorAll('.slider-slide');
+    const sliderPrev = document.querySelector('.slider-prev');
+    const sliderNext = document.querySelector('.slider-next');
+    const dotsContainer = document.querySelector('.slider-dots');
+    let currentSlide = 0;
 
-    navToggle.addEventListener('click', function() {
-        this.classList.toggle('active');
-        navDropdown.classList.toggle('open');
+    slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.classList.add('slider-dot');
+        if (i === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(dot);
     });
 
-    navDropdown.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', function() {
-            navToggle.classList.remove('active');
-            navDropdown.classList.remove('open');
-        });
-    });
+    function goToSlide(n) {
+        slides[currentSlide].classList.remove('active');
+        dotsContainer.children[currentSlide].classList.remove('active');
+        currentSlide = (n + slides.length) % slides.length;
+        slides[currentSlide].classList.add('active');
+        dotsContainer.children[currentSlide].classList.add('active');
+    }
 
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.nav-menu')) {
-            navToggle.classList.remove('active');
-            navDropdown.classList.remove('open');
-        }
-    });
+    goToSlide(0);
+    sliderPrev.addEventListener('click', () => goToSlide(currentSlide - 1));
+    sliderNext.addEventListener('click', () => goToSlide(currentSlide + 1));
 
     // ZOOM GALLERY FUNCTIONALITY
     const zoomModal = document.getElementById('zoomModal');
