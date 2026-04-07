@@ -225,39 +225,63 @@
 <section class="results" id="results">
     <div class="results-container">
         <h2>Real results from real businesses</h2>
-        <p class="results-subtitle">Click any image to see the full metrics clearly.</p>
+        <p class="results-subtitle">Swipe to see real client outcomes.</p>
 
-        <div class="zoom-gallery">
-            <div class="gallery-featured">
-                <div class="featured-item zoom-trigger">
-                    <img src="./assets/client-feedback/bout-fitness-23-new-gym-signups-1000-ad-spend.png" alt="Bout Fitness" />
+        <div class="results-slider">
+            <button class="slider-btn results-slider-prev" aria-label="Previous">&lt;</button>
+            <div class="results-slider-track">
+                <div class="results-slide active">
+                    <div class="results-slide-img zoom-trigger">
+                        <img src="./assets/client-feedback/bout-fitness-23-new-gym-signups-1000-ad-spend.png" alt="Bout Fitness" />
+                    </div>
+                    <p class="slide-caption">Bout Fitness had 23 new gym signups with only $1,000 ad spend.</p>
                 </div>
-                <div class="featured-item zoom-trigger">
-                    <img src="./assets/client-feedback/online-store-229-sales-increase-nz-140-au-shopify-dashboard.png" alt="Online store" />
+                <div class="results-slide">
+                    <div class="results-slide-img zoom-trigger">
+                        <img src="./assets/client-feedback/online-store-229-sales-increase-nz-140-au-shopify-dashboard.png" alt="Online store" />
+                    </div>
+                    <p class="slide-caption">229% increase in sales in New Zealand and 140% increase in AU for this online store.</p>
+                </div>
+                <div class="results-slide">
+                    <div class="results-slide-img zoom-trigger">
+                        <img src="./assets/client-feedback/nextadvisory-50-conversion-booked-calls-luke-kemeys.png" alt="NextAdvisory calls" />
+                    </div>
+                    <p class="slide-caption">50% conversion rate on booked calls for NextAdvisory through targeted paid ads.</p>
+                </div>
+                <div class="results-slide">
+                    <div class="results-slide-img zoom-trigger">
+                        <img src="./assets/client-feedback/koroneiki-1500-instagram-followers-website-enquiries-flooding-in.png" alt="Koroneiki growth" />
+                    </div>
+                    <p class="slide-caption">1,500 new Instagram followers and website enquiries flooding in for Koroneiki.</p>
+                </div>
+                <div class="results-slide">
+                    <div class="results-slide-img zoom-trigger">
+                        <img src="./assets/client-feedback/dee-singh-stacked-calendar-250k-people-seen-insurance-ads.png" alt="Dee Singh reach" />
+                    </div>
+                    <p class="slide-caption">250,000 people reached with insurance ads, stacking the calendar with bookings.</p>
+                </div>
+                <div class="results-slide">
+                    <div class="results-slide-img zoom-trigger">
+                        <img src="./assets/client-feedback/laura-james-biggest-month-of-sales-ever-email.png" alt="Laura James biggest month sales" />
+                    </div>
+                    <p class="slide-caption">Laura James had her biggest month of sales ever after running paid ads with us.</p>
+                </div>
+                <div class="results-slide">
+                    <div class="results-slide-img zoom-trigger">
+                        <img src="./assets/client-results/petconz-roas-18x.png" alt="Pet.co.nz 18x" />
+                    </div>
+                    <p class="slide-caption">18x return on ad spend for an ecommerce brand using Meta ads.</p>
+                </div>
+                <div class="results-slide">
+                    <div class="results-slide-img zoom-trigger">
+                        <img src="./assets/client-results/petconz-roas-7x.png" alt="Pet.co.nz 7x" />
+                    </div>
+                    <p class="slide-caption">7x ROAS across 267 purchases, scaling profitably through Meta ads.</p>
                 </div>
             </div>
-
-            <div class="gallery-grid">
-                <div class="gallery-item zoom-trigger">
-                    <img src="./assets/client-feedback/nextadvisory-50-conversion-booked-calls-luke-kemeys.png" alt="NextAdvisory calls" />
-                </div>
-                <div class="gallery-item zoom-trigger">
-                    <img src="./assets/client-feedback/koroneiki-1500-instagram-followers-website-enquiries-flooding-in.png" alt="Koroneiki growth" />
-                </div>
-                <div class="gallery-item zoom-trigger">
-                    <img src="./assets/client-feedback/dee-singh-stacked-calendar-250k-people-seen-insurance-ads.png" alt="Dee Singh reach" />
-                </div>
-                <div class="gallery-item zoom-trigger">
-                    <img src="./assets/client-feedback/laura-james-biggest-month-of-sales-ever-email.png" alt="Laura James biggest month sales" />
-                </div>
-                <div class="gallery-item zoom-trigger">
-                    <img src="./assets/client-results/petconz-roas-18x.png" alt="Pet.co.nz 18x" />
-                </div>
-                <div class="gallery-item zoom-trigger">
-                    <img src="./assets/client-results/petconz-roas-7x.png" alt="Pet.co.nz 7x" />
-                </div>
-            </div>
+            <button class="slider-btn results-slider-next" aria-label="Next">&gt;</button>
         </div>
+        <div class="results-slider-dots"></div>
     </div>
 </section>
 
@@ -559,32 +583,38 @@
         });
     });
 
-    // RESULTS SLIDER
-    const slides = document.querySelectorAll('.slider-slide');
-    const sliderPrev = document.querySelector('.slider-prev');
-    const sliderNext = document.querySelector('.slider-next');
-    const dotsContainer = document.querySelector('.slider-dots');
-    let currentSlide = 0;
-
-    slides.forEach((_, i) => {
-        const dot = document.createElement('button');
-        dot.classList.add('slider-dot');
-        if (i === 0) dot.classList.add('active');
-        dot.addEventListener('click', () => goToSlide(i));
-        dotsContainer.appendChild(dot);
-    });
-
-    function goToSlide(n) {
-        slides[currentSlide].classList.remove('active');
-        dotsContainer.children[currentSlide].classList.remove('active');
-        currentSlide = (n + slides.length) % slides.length;
-        slides[currentSlide].classList.add('active');
-        dotsContainer.children[currentSlide].classList.add('active');
+    // SLIDER FACTORY
+    function initSlider(slideSelector, prevSelector, nextSelector, dotsSelector) {
+        const s = document.querySelectorAll(slideSelector);
+        const prev = document.querySelector(prevSelector);
+        const next = document.querySelector(nextSelector);
+        const dots = document.querySelector(dotsSelector);
+        if (!s.length) return;
+        let cur = 0;
+        s.forEach((_, i) => {
+            const d = document.createElement('button');
+            d.classList.add('slider-dot');
+            if (i === 0) d.classList.add('active');
+            d.addEventListener('click', () => go(i));
+            dots.appendChild(d);
+        });
+        function go(n) {
+            s[cur].classList.remove('active');
+            dots.children[cur].classList.remove('active');
+            cur = (n + s.length) % s.length;
+            s[cur].classList.add('active');
+            dots.children[cur].classList.add('active');
+        }
+        go(0);
+        prev.addEventListener('click', () => go(cur - 1));
+        next.addEventListener('click', () => go(cur + 1));
     }
 
-    goToSlide(0);
-    sliderPrev.addEventListener('click', () => goToSlide(currentSlide - 1));
-    sliderNext.addEventListener('click', () => goToSlide(currentSlide + 1));
+    // Dashboard slider (numbers don't lie)
+    initSlider('.slider-slide', '.slider-prev', '.slider-next', '.slider-dots');
+
+    // Results slider (real results)
+    initSlider('.results-slide', '.results-slider-prev', '.results-slider-next', '.results-slider-dots');
 
     // ZOOM GALLERY FUNCTIONALITY
     const zoomModal = document.getElementById('zoomModal');
